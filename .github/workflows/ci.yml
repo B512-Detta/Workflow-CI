@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
 
 jobs:
   ml-training:
@@ -20,20 +20,18 @@ jobs:
       with:
         python-version: '3.8'
     
-    - name: Install MLflow
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install mlflow
+        pip install mlflow pandas numpy scikit-learn matplotlib seaborn
+    
+    - name: Change to MLProject directory
+      run: cd MLProject
     
     - name: Run MLflow Project
       run: |
-        # mlflow run MLProject --no-conda
-        # Atau
-        mlflow run MLProject
-    
-    - name: List MLflow artifacts
-      run: |
-        find MLProject/mlruns -type f -name "*.txt" -o -name "*.json" -o -name "*.yaml" | head -20
+        cd MLProject
+        mlflow run . --env-manager=local
     
     - name: Upload MLflow artifacts
       uses: actions/upload-artifact@v4
@@ -41,3 +39,4 @@ jobs:
         name: mlflow-artifacts
         path: MLProject/mlruns/
         retention-days: 30
+      if: always()
