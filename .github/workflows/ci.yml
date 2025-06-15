@@ -27,9 +27,9 @@ jobs:
     
     - name: Run MLflow Project
       run: |
-        mlflow run MLProject --no-conda
+        # mlflow run MLProject --no-conda
         # Atau
-        # mlflow run MLProject
+        mlflow run MLProject
     
     - name: List MLflow artifacts
       run: |
